@@ -31,3 +31,23 @@ Inside that directory, you can run several commands:
   - .\playwright.config.ts - Playwright Test configuration
 
 Visit https://playwright.dev/docs/intro for more information. ✨
+
+## How do I prepare the web environment?
+
+access `../apps/web` and run `yarn install` or `npm install`
+
+## How do I prepare the api environment??
+
+access `../apps/api` and run `yarn install` or `npm install`
+
+## How do I run local database?
+
+access `../apps/api` and run `yarn db:init` or `npm run db:init`
+
+## How do I run web app?
+
+access `../apps/web` and run `yarn dev` or `npm run dev`
+
+## How do I run api app?
+
+access `../apps/api` and run `yarn dev` or `npm run dev`
