@@ -51,3 +51,11 @@ access `../apps/web` and run `yarn dev` or `npm run dev`
 ## How do I run api app?
 
 access `../apps/api` and run `yarn dev` or `npm run dev`
+
+## How can I see the tests running?
+
+yarn playwright test --headed
+
+## How can I open PlayWright Inspector to debug?
+
+yarn playwright test --debug
