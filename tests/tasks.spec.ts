@@ -22,6 +22,24 @@ test('deve poder cadastrar uma nova tarefa via id -> Estratégia 01', async ({ p
     await expect(target).toBeVisible();
 });
 
+test('não deve permitir tarefa duplicada', async ({ page, request }) => {
+    const task = {
+        name: 'Ler um bom livro',
+        is_done: false
+    }
+
+    await request.delete('http://localhost:3333/helper/tasks/' + task.name);
+    await request.post('http://localhost:3333/tasks/', {data: task});
+    await page.goto('http://localhost:3000');
+
+    const inputTaskLocator = page.locator('input[class*=InputNewTask]');
+    await inputTaskLocator.fill(task.name);
+
+    const target = page.locator('.swal2-html-container');
+    await expect(target).toHaveText('Task already exists!');
+
+});
+
 // test('deve poder cadastrar uma nova tarefa via placeholder -> Estratégia 02', async ({ page }) => {
 //     await page.goto('http://localhost:3000');
 //     await page.fill('input[placeholder="Add a new Task"]', faker.lorem.words());
