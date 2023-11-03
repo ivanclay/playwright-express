@@ -1,39 +1,58 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, APIRequestContext } from '@playwright/test';
+import { TaskModel } from './fixtures/task.model';
+import { deleteTaskByHelper, postTask } from './support/helpers';
 // import { faker } from '@faker-js/faker';
+
+// async function deleteTaskByHelper(request: APIRequestContext, taskName: string){
+//     await request.delete('http://localhost:3333/helper/tasks/' + taskName);
+// }
+
+// async function postTask(request: APIRequestContext, task: TaskModel){
+//     const newTask = await request.post('http://localhost:3333/tasks/', {data: task});
+//     await expect(newTask.ok).toBeTruthy();
+// }
 
 test('deve poder cadastrar uma nova tarefa via id -> Estratégia 01', async ({ page, request }) => {
 
+    const task: TaskModel = {
+        name: 'Ler um livro de TypeScript',
+        is_done: false
+    }
+
     // Dado que tenho uma nova tarefa
-    const taskName = 'Ler um livro de TypeScript';
-    await request.delete('http://localhost:3333/helper/tasks/' + taskName);
+    //await request.delete('http://localhost:3333/helper/tasks/' + task.name);
+    deleteTaskByHelper(request, task.name );
     
     // E estou na página de cadastro
     await page.goto('http://localhost:3000');
 
     // Quando faço o cadastro da tarefa
-    await page.fill('#newTask', taskName);
+    await page.fill('#newTask', task.name);
     await page.click('css=button >> text=Create');
 
     //Então essa tarefa deve ser exibida na lista
     // const target = page.getByTestId('task-item');
     // const target = page.locator('.task-item');
-    // await expect(target).toHaveText(taskName);
-    const target = page.locator('css=.task-item p >> text=' + taskName);
+    // await expect(target).toHaveText(task.name);
+    const target = page.locator('css=.task-item p >> text=' + task.name);
     await expect(target).toBeVisible();
 });
 
 test('não deve permitir tarefa duplicada', async ({ page, request }) => {
-    const task = {
-        name: 'Ler um bom livro',
+    const task: TaskModel = {
+        name: 'Ler um livro de TypeScript',
         is_done: false
     }
 
-    await request.delete('http://localhost:3333/helper/tasks/' + task.name);
-    await request.post('http://localhost:3333/tasks/', {data: task});
+    //await request.delete('http://localhost:3333/helper/tasks/' + task.name);
+    // await request.post('http://localhost:3333/tasks/', {data: task});
+    deleteTaskByHelper(request, task.name );
+    postTask(request, task);
     await page.goto('http://localhost:3000');
 
     const inputTaskLocator = page.locator('input[class*=InputNewTask]');
     await inputTaskLocator.fill(task.name);
+    await page.click('css=button >> text=Create');
 
     const target = page.locator('.swal2-html-container');
     await expect(target).toHaveText('Task already exists!');
