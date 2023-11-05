@@ -12,6 +12,9 @@ require('dotenv').config();
  */
 export default defineConfig({
   testDir: './tests',
+  expect:{
+    timeout: 5000 //default timeout
+  },
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -30,7 +33,8 @@ export default defineConfig({
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
     headless: false, //default is true
-    baseURL: process.env.BASE_URL
+    baseURL: process.env.BASE_URL,
+    screenshot: 'only-on-failure' //default 'off'
   },
 
   /* Configure projects for major browsers */
