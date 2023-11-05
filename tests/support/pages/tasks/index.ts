@@ -41,4 +41,14 @@ export class TasksPage{
         const target = this.page.getByText(taskName);
         await expect(target).toHaveCSS('text-decoration-line', 'line-through');
     }
+
+    async remove(taskName: string){
+        const target = this.page.locator(`xpath=//p[text()="${taskName}"]/..//button[contains(@class, "Delete")]`);
+        await target.click();
+    }
+
+    async shouldNotExist(taskName: string){
+        const target = this.page.getByText(taskName);
+        await expect(target).not.toBeVisible();
+    }
 }
